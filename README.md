@@ -53,7 +53,11 @@ just give it a function**
 
 We could have added messages as field of the type array with objects in it as a message. but we choose to add it as a collection. In the nav bar we are subscribing to every channel and if every channel has an array of messages, then to build the list we wil have to download every message in the database.
 
+![Architectural Decision_02](https://user-images.githubusercontent.com/15992276/57504233-b1dfce80-72c1-11e9-8af5-47cded42ead8.JPG)
+![Architecural Decision](https://user-images.githubusercontent.com/15992276/57504234-b1dfce80-72c1-11e9-98db-509fe846ca64.JPG)
+
 Collections do not get downloaded and you have got to ask for the collection. Collections can also be queried which means messages can come in the right order on the channel.
+
 
 If we don't pass **arguments** to useEffect, React will call the effect every single time the app renders.
 
