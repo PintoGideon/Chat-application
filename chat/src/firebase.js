@@ -4,7 +4,7 @@ import 'firebase/database';
 import 'firebase/auth';
 
 const firebaseConfig = {
-	apiKey: '',
+	apiKey: 'AIzaSyD6SnbnnsATC4mvAds5XCnUVGY7ox0a4yI',
 	authDomain: 'firechat-d8a74.firebaseapp.com',
 	databaseURL: 'https://firechat-d8a74.firebaseio.com',
 	projectId: 'firechat-d8a74',
