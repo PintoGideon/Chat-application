@@ -111,7 +111,7 @@ The user will be stored as a reference type on the messages collection.
 We want an avatar to be displayed if the message
 is from a different user id.
 
-### Code snipped from the Messages component
+Code snippet from the **Messages component**
 
 ```javascript
 {
