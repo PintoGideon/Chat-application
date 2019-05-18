@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import useCollection from './useCollection';
 import useDocWithCache from './useDocWithCache';
-import formatDate from 'date-fns/format';
 import isSameDay from 'date-fns/is_same_day';
 
 function ChatScroller(props) {
@@ -84,7 +83,7 @@ function FirstMessageFromUser({ message, showDay }) {
 					<div>
 						<span className="UserName">{author && author.displayName} </span>
 						<span className="TimeStamp">
-							{formatDate(message.createdAt.seconds * 1000, 'h:mm A')}
+							{new Date(message.createdAt.seconds * 1000).toLocaleDateString()}
 						</span>
 					</div>
 					<div className="MessageContent">{message.text}</div>

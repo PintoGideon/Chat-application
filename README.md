@@ -58,7 +58,6 @@ We could have added messages as field of the type array with objects in it as a 
 
 Collections do not get downloaded and you have got to ask for the collection. Collections can also be queried which means messages can come in the right order on the channel.
 
-
 If we don't pass **arguments** to useEffect, React will call the effect every single time the app renders.
 
 ```javascript
@@ -126,16 +125,151 @@ Code snippet from the **Messages component**
 }
 ```
 
+# Routing
 
-# More notes to come....
+- Install Reach Router
 
+Whenever a section of the page is changing,
+you need a router there.
 
+```javascript
+<Router>
+	<Channel path="channel/:channelId" user={user} />
+	<Redirect from="/" to="channel/general" />
+</Router>
+```
 
+**_Router is going to parse the url in the path and is going to send it to the channel as a prop_**
 
+We pass the channelId from Channel to Messages. Messages takes that channelId and passes it to useCollection.
+The messages are pushed under the channelId passed as arguments to useEffect.
 
+```javascript
+<div className="ChannelMain">
+	<ChannelInfo channelId={channelId} />
+	<Messages channelId={channelId} />
+	<ChatInput channelId={channelId} user={user} />
+</div>
+```
 
+```javascript
+useEffect(() => {
+	const docs = [];
+	snapshot.forEach(doc => {
+		docs.push({
+			...doc.data(),
+			id: doc.id
+		});
+	});
+}, [path, orderBy]);
+```
 
+Whenever we click on the channels, the useCollection is called with a new path. The useEffect unsubscribes and subscribes to the new channel.
 
+# Using a cache
 
+There are some features of the app that could be stored in a
+cache rather than pulling data from firebase.
+This will avoid a flicker or any delays in rendering.
 
+We are going to create a cache
+and a pending cache.
 
+We are going to store the users
+in the cache and set the state
+with it. We are going to tell
+useEffect that if we do have
+a doc, just return out of here. We are going to read it from
+the cache.
+
+**_Please refer the useDocWithCache.js for the code_**
+
+We are also going to have a pendingCache.
+
+- We are going to check if we have the user in the
+  cache
+- We also want to figure out what our promise should be
+- We are going to check if our promise is in the pending[path].
+- When a new request for a user comes in, it's
+  not going to be in the cache. When the second
+  request comes in for a new user, it's going
+  to check if a promise is pending in the pendingCache. We do not
+  want to set data on an unmounted component.
+
+# use Ref
+
+When we have a chatroom with a lot of messages,
+we have to scroll down to see a new message come in.
+
+To create side effect like a scroll is what **_useEffect_** is actually designed
+for.
+
+We put a ref on the messages component called
+scrollerRef. A ref is is just somewhere
+to hang onto a value.
+React is going to create an actual DOM element
+and ref is a reference to that.
+
+# Managing the smooth Scroll
+
+In the ChatScroller Component, we use
+an **_useEffect_**
+
+```javascript
+useEffect(() => {
+	if (shouldScrollRef.current) {
+		const node = ref.current;
+		node.scrollTop = node.scrollHeight;
+	}
+}, []);
+```
+
+We only want to scroll when we are
+at the bottom of the screen. We can use refs
+for DOM elements and then we can use
+ref for something that is stateful.
+
+```javascript
+function ChatScroller(props) {
+	const ref = useRef();
+	const shouldScrollRef = useRef(true);
+
+	useEffect(() => {
+		if (shouldScrollRef.current) {
+			const node = ref.current;
+			node.scrollTop = node.scrollHeight;
+		}
+	}, []);
+	const handleScroll = () => {
+		const node = ref.current;
+		const { scrollTop, clientHeight, scrollHeight } = node;
+		const atBottom = scrollHeight === clientHeight + scrollTop;
+		shouldScrollRef.current = atBottom;
+	};
+
+	return <div {...props} ref={ref} onScroll={handleScroll} />;
+}
+```
+
+# Queries in Firebase
+
+We want to display the users according to the chatrooms
+they are currently participating in.
+Here is a peek in firebase to see Ryan proceeds to do this.
+
+Now when we fetch the users from usecollection, we want
+to query it as per channels.channelId.
+
+```javascript
+function Members({ channelId }) {
+	useEffect(() => {
+		db.collection('users')
+			.where(`channels.${channelId}`, '==', true)
+			.onSnapshot(snapshot => {
+				snapshot.forEach(doc => {
+					console.log(doc.data());
+				});
+			});
+	}, [channelId]);
+}
+```
