@@ -111,6 +111,9 @@ The user will be stored as a reference type on the messages collection.
 
 ## Tricky parts implemented
 
+
+![A quick peek at our data model](https://user-images.githubusercontent.com/15992276/57964498-5ab2ad00-7904-11e9-8383-af8597e6a668.JPG)
+
 We want an avatar to be displayed if the message
 is from a different user id.
 
@@ -252,6 +255,8 @@ function ChatScroller(props) {
 ```
 
 # Queries in Firebase
+
+![users](https://user-images.githubusercontent.com/15992276/57964499-5ab2ad00-7904-11e9-963c-459fd8137549.JPG)
 
 We want to display the users according to the chatrooms
 they are currently participating in.
