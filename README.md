@@ -431,6 +431,8 @@ in firestore does not.
 
 Understand the workflow of the presence API.
 
+![new doc 2019-05-18 19 36 55-1](https://user-images.githubusercontent.com/15992276/57977182-002b5680-79c1-11e9-90b9-99805da87afb.jpg)
+
 # Triggers
 
 Besides functions when someone vists the url to trigger
