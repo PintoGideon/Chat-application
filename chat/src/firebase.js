@@ -4,7 +4,7 @@ import 'firebase/database';
 import 'firebase/auth';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyD6SnbnnsATC4mvAds5XCnUVGY7ox0a4yI',
+	apiKey: '',
 	authDomain: 'firechat-d8a74.firebaseapp.com',
 	databaseURL: 'https://firechat-d8a74.firebaseio.com',
 	projectId: 'firechat-d8a74',
@@ -29,7 +29,7 @@ export function setupPresence(user) {
 	};
 
 	const isOnlineForFirestore = {
-		state: 'offline',
+		state: 'online',
 		lastChanged: firebase.firestore.FieldValue.serverTimestamp()
 	};
 

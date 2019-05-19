@@ -273,3 +273,161 @@ function Members({ channelId }) {
 	}, [channelId]);
 }
 ```
+
+# Breaking down one of our custom hook in the application
+
+Breaking down the useCollection custom hook.
+
+The function takes in the path, and the firebase queries.
+We use the useEffect for data loading in this function.
+
+```javascript
+function useCollection(path, orderBy, where = []) {
+	const [docs, setDocs] = useState([]);
+
+	useEffect(() => {
+		let collection = db.collection(path);
+
+		if (orderBy) {
+			collection = collection.orderBy(orderBy);
+		}
+
+		if (queryField) {
+			collection = collection.where(queryField, queryOperator, queryValue);
+		}
+	});
+}
+```
+
+Now, to think what are we going to return from the functions.
+If we send in the path to fetch the messages, the function should return the messages and if members, then an array of all the users in that particular channel.
+
+```javascript
+return collection.onSnapshot(snapshot => {
+	const docs = [];
+	snapshot.forEach(doc => {
+		doc.push({
+			...doc.data(),
+			id: doc.id
+		});
+	});
+
+	setDocs(docs);
+});
+```
+
+We can set the state of the docs once we fetch data from firebase.
+
+```javascript
+return docs;
+```
+
+# Indexes
+
+When we run a query we get the following error
+from firebase with a link to create indexes.
+
+```javascript
+firebase init
+
+As you proceed to the next steps, one
+of the questions firebase will ask you is What
+file should be used for Firestore indexes?
+You could use a default and then choose to overwrite
+the previously created index file.
+
+```
+
+However we cannot index on dynamic data. If we really want to index users in a specific channel, we would have
+to remodel our database.
+
+Instead of storing which channel a user belongs to
+in the users collection, we would probably want a seperate collection like channelUsers and link to
+to the users collection.
+
+Indexing is probably a bad idea but I am taking
+note of this as an architectural decision.
+
+# Complex parts
+
+# Adding a realtime user presence
+
+Firestore does not have the ability to tell us the online and offline status of somebody. We are going to have to use the RealTime database for that.
+
+- When the user first logs in, we set
+  up the user in firebase.
+- Then we setup presence.
+
+```javascript
+db.collection('users')
+	.doc(user.uid)
+	.set(user, { merge: true });
+setupPresence(user);
+```
+
+The Real Time database gives us a function called ref which tells us if the user is connected or not.
+
+```javascript
+rtdb.ref(`.info/connected`).on('value', async snapshot => {
+		if (snapshot.val() === false) {
+			userDoc.update({
+				status: isOfflineForFirestore
+			});
+			return;
+		}
+```
+
+```javascript
+const isOfflineForRTDB = {
+	state: 'offline',
+	lastChanged: firebase.database.ServerValue.TIMESTAMP
+};
+
+const isOnlineForRTDB = {
+	state: 'online',
+	lastChanged: firebase.database.ServerValue.TIMESTAMP
+};
+```
+
+The code above will establish some presence in the Real
+time database but this does not toggle the user fields
+to show who is offline and online in the channel. We
+need to sync RTDB with firestore for that.
+
+```javascript
+const isOfflineForFirestore = {
+	state: 'offline',
+	lastChanged: firebase.firestore.FieldValue.serverTimestamp()
+};
+
+const isOnlineForFirestore = {
+	state: 'offline',
+	lastChanged: firebase.firestore.FieldValue.serverTimestamp()
+};
+```
+
+When we are offline, we are just storing that info
+in the cache as we cannot communicate that to the UI.
+
+When we get disconnected, the RTDB will update
+with the onDisconnect() method but we cannot tell
+the firestore that.
+
+# Adding Presence to the UI
+
+The status in the RTDB changes to offline
+but the status under the user collection
+in firestore does not.
+
+Understand the workflow of the presence API.
+
+# Triggers
+
+Besides functions when someone vists the url to trigger
+them, there are also functions that can be triggered
+by changes to data in the database.
+
+We are going to listen for changes in the cloud function
+for change in the status key inside RTDB.
+
+# More Note to come.....
