@@ -424,6 +424,11 @@ The status in the RTDB changes to offline
 but the status under the user collection
 in firestore does not.
 
+![RTDB](https://user-images.githubusercontent.com/15992276/57977157-5ba91480-79c0-11e9-83d5-593af42c2f17.JPG)
+![status](https://user-images.githubusercontent.com/15992276/57977158-5ba91480-79c0-11e9-89b1-34e5ade12996.JPG)
+![users](https://user-images.githubusercontent.com/15992276/57977159-5ba91480-79c0-11e9-9e20-9004b1381895.JPG)
+![Cloud Firestore](https://user-images.githubusercontent.com/15992276/57977155-5ba91480-79c0-11e9-9ee7-29c01617c313.JPG)
+
 Understand the workflow of the presence API.
 
 # Triggers
@@ -434,11 +439,5 @@ by changes to data in the database.
 
 We are going to listen for changes in the cloud function
 for change in the status key inside RTDB.
-
-![RTDB](https://user-images.githubusercontent.com/15992276/57977157-5ba91480-79c0-11e9-83d5-593af42c2f17.JPG)
-![status](https://user-images.githubusercontent.com/15992276/57977158-5ba91480-79c0-11e9-89b1-34e5ade12996.JPG)
-![users](https://user-images.githubusercontent.com/15992276/57977159-5ba91480-79c0-11e9-9e20-9004b1381895.JPG)
-![Cloud Firestore](https://user-images.githubusercontent.com/15992276/57977155-5ba91480-79c0-11e9-9ee7-29c01617c313.JPG)
-!
 
 # More Note to come.....
