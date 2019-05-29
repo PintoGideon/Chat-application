@@ -19,7 +19,7 @@ A users collection could have a document named user with the following attribute
 Now whenever you request for channels, we get the messages array too.
 In the Real time database, you get whatever node of the tree you required and all of it's subnodes.
 
-This meant you had to be really careful about how you structured your data. In Firestore, queries are shallow. In Cloud Firestore, queries are shallow. You don't get all of the sub-collections by default
+This meant you had to be really careful about how you structured your data. In firestore, queries are shallow. You don't get all of the sub-collections by default
 
 **_useEffect_** is our chance to go and do a side effect
 like go and read something from firebase. Whenever we use **_useeffect_**, we need a method to clean things up.
